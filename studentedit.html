@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student</title>
+    <style>
+        input[type=text], select {
+          width: 100%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          display: inline-block;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+        
+        
+
+        input[type=button] {
+            width:100%;
+          background-color: #4CAF50;
+          color: white;
+          padding: 14px 20px;
+          margin: 8px 0;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        
+        input[type=button]:hover {
+          background-color: #45a049;
+        }
+        
+        .form-box{
+            
+          border-radius: 5px;
+          background-color: #f2f2f2;
+          padding: 20px;
+        }
+
+        
+        </style>
+</head>
+<body>
+            <div class="form-box">
+                <div class="form-value">
+                    <form action="" id="hackathon-form">
+                        <h2>Student</h2>
+                            <label>Hackathon Name
+                            <input type="text" name="hackathon" id="hackathon" required /><br>
+                            </label>
+
+
+
+                            <label>Team Name
+                            <input type="text" name="tname" id="tname" required /><br>
+                            </label>
+
+                            <label>Team size
+                            <input type="text" name="members" id="members" required /><br>
+                            </label>
+
+                            <label>Leader Name
+                            <input type="text" name="Lead" id="tlead" required />
+                            <div id="teamates">
+                            </div>
+                            <br><input type ="button" id="submit-btn1" value="view selected members" onclick="disp();">
+                            <table id="selectedTable">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
+                            <div id="mentors">
+                            </div>
+
+                            <div class="fin">
+                            <br><input type ="button" id="submit-btn2" value="submit" onclick="check();">
+                            </div>
+
+                            
+                    </form>
+                </div>
+            </div>
+            <div class="tbl">
+            </div>
+            
+        
+        <script>
+            a = [
+            {
+                name: "xyz"
+            },
+            {
+                name: "def"
+            },
+            {
+                name: "abc"
+            },
+            {
+                name: "ghi"
+            },
+            {
+                name: "jkl"
+            }
+            ];
+
+            m=[
+            {
+                name: "men1"
+            },
+            {
+                name: "men2"
+            },
+            {
+                name: "abc"
+            },
+            {
+                name: "ghi"
+            },
+            {
+                name: "jkl"
+            }
+            ];
+
+
+            //fetch("http://localhost:5000/hacktrack/events",{method:"GET",body:JSON.parse(obj)}).then()
+            //let output ="Team Members:<br> <select id='teammembers' multiple>";
+            //let output="Students:<br>";
+            /*for (let i=0; i<a.length;i++)
+            {
+                
+                output+="<input type='checkbox' id=stud"+i+" class='students' value="+a[i].name+">";
+                output+="<label for=stud"+i+">" +a[i].name +"<br>";
+            }
+    
+            document.getElementById("teamates").innerHTML=output;
+*/
+            let out = "<br>Mentors:<br> <select id='teammembers' >";
+            for (let i = 0; i < m.length; i++) {
+                out += "<option value=" + m[i].name + ">" + m[i].name + "</option>";
+             }
+            out += "</select>";
+            document.getElementById("mentors").innerHTML = out;
+
+        /*function disp()
+        {
+            //console.log("yes");
+           let b=[];
+            let x=document.querySelectorAll(".students");
+            console.log(x);
+            for (let i=0; i<x.length;i++)
+            {
+                if(x[i].checked==true)
+                {
+                    b.push(x[i].value);
+                }
+            }
+            //console.log(b);
+            let n=document.getElementById("members").value;
+            if(n==b.length)
+            {
+                let tableBody = document.getElementById("selectedTable").getElementsByTagName("tbody")[0];
+                tableBody.innerHTML = "<h4>Selected Team Members</h4>";
+                for (let i = 0; i < b.length; i++) {
+                    let row = tableBody.insertRow(i);
+                    let cell = row.insertCell(0);
+                    cell.innerHTML = b[i];
+                }
+            }
+            else{
+                window.alert("teamate count is invalid");
+            }
+        }*/
+
+        let output = "Team Members:<br> <select id='teammembers' multiple>";
+        let lead=document.getElementById("tlead");
+        for (let i = 0; i < a.length; i++) {
+            if(a[i].name!=lead)
+            output += "<option value=" + a[i].name + ">" + a[i].name + "</option>";
+        }
+        output += "</select>";
+        document.getElementById("teamates").innerHTML = output;
+
+        
+        function disp() {
+            let selectedOptions = [];
+            let selectElement = document.getElementById("teammembers");
+            for (let i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].selected) {
+                    selectedOptions.push(selectElement.options[i].value);
+                }
+            }
+            console.log(selectedOptions)
+
+
+            let tableBody = document.getElementById("selectedTable").getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = "<h4>Selected Team Members</h4>";
+            for (let i = 0; i < selectedOptions.length; i++) {
+                let row = tableBody.insertRow(i);
+                let cell = row.insertCell(0);
+                cell.innerHTML = selectedOptions[i];
+            }
+        }
+
+        function check()
+        {
+            let ha=document.getElementById("hackathon").value;
+            console.log(ha)
+            let hl=document.getElementById("tname").value;
+            let n=document.getElementById("members").value;
+            let tl=document.getElementById("tlead").value;
+            var regEx = new RegExp(/^[0-9a-zA-Z]/);
+
+            if(!regEx.test(ha))
+            {
+                window.alert("invalid hackathon name");
+            }
+
+            if(hl=="")
+            {
+                window.alert("invalid team name");
+            }
+
+            if(!regEx.test(tl))
+            {
+                window.alert("invalid team leader name");
+            }
+
+
+        }
+        </script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

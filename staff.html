@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff</title>
+    <style>
+        input[type=text], select {
+          width: 100%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          display: inline-block;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+        
+        input[type=button] {
+          background-color: #4CAF50;
+          color: white;
+          padding: 14px 20px;
+          margin: 8px 0;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        
+        input[type=button]:hover {
+          background-color: #45a049;
+        }
+        
+        .form-box{
+            
+          border-radius: 5px;
+          background-color: #f2f2f2;
+          padding: 20px;
+        }
+
+        
+        </style>
+</head>
+<body>
+    <div class="form-box">
+    <h1>Welcome Staff</h1>
+    <form>
+        <input type="button" value="requests" onclick="req();">
+        <input type="button" value="details" onclick="info();"><br>
+    </form>
+
+    <div id="filter">
+
+    </div>
+    <table id="selectedTable">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="show">
+
+    </div>
+    </div>
+
+    <script>
+        a = [
+            {
+                hname:"hack1",
+                name: "xyz"
+            },
+            {
+                hname:"hack2",
+                name: "def"
+            },
+            {
+                hname:"hack3",
+                name: "abc"
+            },
+            {
+                hname:"hack4",
+                name: "ghi"
+            },
+            {
+                hname:"hack5",
+                name: "jkl"
+            }
+            ];
+        function info()
+        {
+            let out="<form><br><input type='textbox' id='search' value='search'><br><input type='radio' class='criteria' value='hackathon' id='hackathon' name='hackathon'><label for='hackathon'>hackathon</label><br><input type='radio' class='criteria' value='student' id='stud' name='student'><label for='student'>student</label><br><input type='button' value='search' id='searchbtn' onclick='det();'></form>";
+            document.getElementById("filter").innerHTML=out;
+            let n=document.getElementById("search").value;
+        }
+        function det()
+        {
+            let b=[];
+            let ele=document.getElementById("search").value;
+            let cho=document.querySelectorAll(".criteria");
+            let x="";
+            console.log(cho);
+            for(let i in cho)
+            {
+                if(cho[i].checked==true)
+                {
+                    x=cho[i].value;
+                }
+            }
+            if(ele=="search")
+            {
+                
+                if(x=="hackathon")
+                {
+                    for(let j in a)
+                    {
+
+                        b.push(a[j].hname);
+                    }
+                    let tableBody = document.getElementById("selectedTable").getElementsByTagName("tbody")[0];
+                    tableBody.innerHTML = "<h4>hackathon</h4>";
+                    for (let i = 0; i < b.length; i++) 
+                    {
+                    let row = tableBody.insertRow(i);
+                    let cell = row.insertCell(0);
+                    cell.innerHTML = b[i];
+                    }
+                }
+                else
+                {
+                    for(let j in a)
+                    {
+
+                        b.push(a[j].name);
+                    }
+                    let tableBody = document.getElementById("selectedTable").getElementsByTagName("tbody")[0];
+                    tableBody.innerHTML = "<h4>hackathon</h4>";
+                    for (let i = 0; i < b.length; i++) 
+                    {
+                    let row = tableBody.insertRow(i);
+                    let cell = row.insertCell(0);
+                    cell.innerHTML = b[i];
+                    }
+                }
+            }
+            else
+            {
+                if(x=="hackathon")
+                {
+                    for(let j in a)
+                    {
+                        if(a[j].hname==ele)
+                        {
+                            document.getElementById("show").innerHTML=a[j].hname;
+                        }
+                    }
+                }
+                else
+                {
+                    for(let j in a)
+                    {
+                        if(a[j].name==ele)
+                        {
+                            document.getElementById("show").innerHTML=a[j].name;
+                        }
+                    }
+                }
+            }
+        }
+        function req()
+        {
+            let but= "<br><input type='button' value='accept' id='acc'> <input type='button' value='reject' id='rej'><br>";
+            document.getElementById("filter").innerHTML=but;
+        }
+    </script>
+</body>
+</html>
