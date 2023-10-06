@@ -95,18 +95,21 @@
                 email:emailInput,
             }
             console.log(JSON.stringify(obj))
-            fetch("http://localhost:5001/hacktrack/login/",{method:"POST",body:JSON.stringify(obj)}).then((res)=>console.log(res));
-            fetch("http://localhost:5001/hacktrack/login/",{});
-
-            if(roleInput=="student")
+            fetch("http://localhost:5001/hacktrack/login/",{method:"POST",body:JSON.stringify(obj)}).then((response) => {return response.json();}).then((data) => {let objres = data;});
+            console.log(objres);
+            if(objres.status==-1)
+            {
+                window.alert("invalid credentials");
+            }
+            if(objres.role=="student" && objres.status==1)
             {
                window.location.href = "studentedit.html";
             }
-            else if(roleInput=="staff")
+            else if(objres.role=="staff" && objres.status==1)
             {
                window.location.href = "staffedit.html";
             }
-            else if(roleInput=="head")
+            else if(objres.role=="head" && objres.status==1)
             {
                window.location.href = "headedit.html";
             }
@@ -123,6 +126,7 @@
     </script>
 </body>
 </html>
+
 
 
 
