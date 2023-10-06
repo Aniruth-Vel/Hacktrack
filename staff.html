@@ -93,8 +93,9 @@
             document.getElementById("filter").innerHTML=out;
             let n=document.getElementById("search").value;
         }
-        function det()
+        async function det()
         {
+            await fetch("http://localhost:5001/hacktrack/staff/",{method:"POST",body:JSON.stringify(1)}).then((response) => {return response.json();}).then((data) => {let objres = data;});
             let b=[];
             let ele=document.getElementById("search").value;
             let cho=document.querySelectorAll(".criteria");
@@ -107,6 +108,7 @@
                     x=cho[i].value;
                 }
             }
+            /*
             if(ele=="search")
             {
                 
@@ -165,7 +167,7 @@
                         }
                     }
                 }
-            }
+            }*/
         }
         function req()
         {
