@@ -15,10 +15,8 @@
           box-sizing: border-box;
         }
         
-        
-
         input[type=button] {
-            width:100%;
+          width:100%;
           background-color: #4CAF50;
           color: white;
           padding: 14px 20px;
@@ -47,14 +45,14 @@
                 <div class="form-value">
                     <form action="" id="hackathon-form">
                         <h2>Student</h2>
-                            <label>Hackathon Name
-                            <input type="text" name="hackathon" id="hackathon" required /><br>
+                        <label>Hackathon Name
+                            <select id='hack' onclick="hacknamefetch();">
+                            
+                            </select>
                             </label>
-
-
-
+                    
                             <label>Team Name
-                            <input type="text" name="tname" id="tname" required /><br>
+                            <input type="text" name="tname" id="tname" required onblur="tnamefetch();"/><br>
                             </label>
 
                             <label>Team size
@@ -62,9 +60,14 @@
                             </label>
 
                             <label>Leader Name
-                            <input type="text" name="Lead" id="tlead" required />
-                            <div id="teamates">
-                            </div>
+                                <select id='lname' onclick="leadfetch();"><br>
+                            </label>
+                            
+                            <label>Team Members
+                                <select id='memb' onclick="membfetch();" class="students" multiple><br>
+                            </label>
+                            
+
                             <br><input type ="button" id="submit-btn1" value="view selected members" onclick="disp();">
                             <table id="selectedTable">
                                 <thead>
@@ -76,8 +79,9 @@
                                 </tbody>
                             </table>
 
-                            <div id="mentors">
-                            </div>
+                            <label>Mentor
+                                <select id='mname' onclick="mentfetch();"><br>
+                            </label>
 
                             <div class="fin">
                             <br><input type ="button" id="submit-btn2" value="submit" onclick="check();">
@@ -92,42 +96,30 @@
             
         
         <script>
-            a = [
+            //hackathon name
+            async function hacknamefetch()
             {
-                name: "xyz"
-            },
-            {
-                name: "def"
-            },
-            {
-                name: "abc"
-            },
-            {
-                name: "ghi"
-            },
-            {
-                name: "jkl"
-            }
-            ];
+                //console.log("yes");
+            let o=" ";
+            await fetch("http://localhost:5001/hacktrack/student/",{method:"POST"}).then((response) => {return response.json();}).then((data) => {let objres = data;});
+            for (let i = 0; i < objres.length; i++) {
+                o += "<option value=" + objres[i].hackathonname + ">" + objres[i].hackathonname + "</option>";
+             }
+            o += "</select>";
+            document.getElementById("hack").innerHTML = o;
 
-            m=[
-            {
-                name: "men1"
-            },
-            {
-                name: "men2"
-            },
-            {
-                name: "abc"
-            },
-            {
-                name: "ghi"
-            },
-            {
-                name: "jkl"
             }
-            ];
 
+            async function tnamefetch()
+            {
+                let tn=document.getElementById("tname");
+                await fetch("http://localhost:5001/hacktrack/student/",{method:"POST",body:JSON.stringify(tn)}).then((response) => {return response.json();}).then((data) => {let objres = data;});
+                if(objres.message==-1)
+                {
+                    windows.alert("team name already exist");
+                }
+            }
+         
 
             //fetch("http://localhost:5000/hacktrack/events",{method:"GET",body:JSON.parse(obj)}).then()
             //let output ="Team Members:<br> <select id='teammembers' multiple>";
@@ -138,31 +130,68 @@
                 output+="<input type='checkbox' id=stud"+i+" class='students' value="+a[i].name+">";
                 output+="<label for=stud"+i+">" +a[i].name +"<br>";
             }
-    
             document.getElementById("teamates").innerHTML=output;
-*/
+            */
+            let x;
+          async function leadfetch()
+          {
+            let o=" ";
+            await fetch("http://localhost:5001/hacktrack/student/",{method:"POST"}).then((response) => {return response.json();}).then((data) => {let objres = data;});
+            for (let i = 0; i < objres.length; i++) {
+                o += "<option value=" + objres[i].StudentName + ">" + objres[i].StudentName + "</option>";
+            }
+            o += "</select>";
+            x=objres;
+            document.getElementById("lname").innerHTML = o;
+          }
+
+
+          async function membfetch()
+          {
+            b=[]
+            let ln=document.getElementById(lname).value;
+            let c=document.getElementById(members).value;
+            for(let i=0;i<x.length;i++)
+            {
+                if(x[i].StudentName!= ln)
+                {
+                    b.push(x[i].StudentName);
+                }
+            }
+
+            let output=" ";            
+            for(i=0;i<b.length;i++)
+            {
+                output += "<option value=" + b[i].StudentName + ">" + b[i].StudentName + "</option>";
+            }
+            output += "</select>";
+            document.getElementById("memb").innerHTML = output;
+        }
+
+          /*
             let out = "<br>Mentors:<br> <select id='teammembers' >";
             for (let i = 0; i < m.length; i++) {
                 out += "<option value=" + m[i].name + ">" + m[i].name + "</option>";
              }
             out += "</select>";
             document.getElementById("mentors").innerHTML = out;
+          */
 
-        /*function disp()
+        function disp()
         {
             //console.log("yes");
            let b=[];
-            let x=document.querySelectorAll(".students");
-            console.log(x);
-            for (let i=0; i<x.length;i++)
+            let y=document.querySelectorAll(".students");
+            //console.log(x);
+            for (let i=0; i<y.length;i++)
             {
-                if(x[i].checked==true)
+                if(y[i].checked==true)
                 {
-                    b.push(x[i].value);
+                    b.push(y[i].value);
                 }
             }
             //console.log(b);
-            let n=document.getElementById("members").value;
+            let n=document.getElementById("memb").value;
             if(n==b.length)
             {
                 let tableBody = document.getElementById("selectedTable").getElementsByTagName("tbody")[0];
@@ -176,8 +205,20 @@
             else{
                 window.alert("teamate count is invalid");
             }
-        }*/
+        }
 
+        async function mentfetch()
+        {
+            await fetch("http://localhost:5001/hacktrack/student/",{method:"POST"}).then((response) => {return response.json();}).then((data) => {let objres = data;});
+            let o=" ";
+            for (let i = 0; i < objres.length; i++) {
+                o += "<option value=" + objres[i].hackathonname + ">" + objres[i].hackathonname + "</option>";
+             }
+            o += "</select>";
+            document.getElementById("mname").innerHTML = o;
+
+        }
+        /*
         let output = "Team Members:<br> <select id='teammembers' multiple>";
         let lead=document.getElementById("tlead");
         for (let i = 0; i < a.length; i++) {
@@ -187,10 +228,10 @@
         output += "</select>";
         document.getElementById("teamates").innerHTML = output;
 
-        
+    
         function disp() {
             let selectedOptions = [];
-            let selectElement = document.getElementById("teammembers");
+            let selectElement = document.getElementById("memb");
             for (let i = 0; i < selectElement.options.length; i++) {
                 if (selectElement.options[i].selected) {
                     selectedOptions.push(selectElement.options[i].value);
@@ -207,7 +248,7 @@
                 cell.innerHTML = selectedOptions[i];
             }
         }
-
+        */
         function check()
         {
             let ha=document.getElementById("hackathon").value;
